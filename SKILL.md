@@ -1,5 +1,6 @@
 ---
 name: ml-figures
+license: AGPL-3.0 (see LICENSE)
 description: Draw machine-learning and deep-learning figures in one consistent, textbook-quality visual style (pale semantic tints, thin dark lines, serif math labels), as SVG, TikZ/LaTeX or matplotlib. Use this whenever someone wants a figure, diagram, illustration or plot of anything ML - model architectures (Transformer, CNN, RNN/LSTM, VAE, GAN, diffusion U-Net, ViT, CLIP, MoE...), neural-network graphs, attention or tensor/matrix operations, training pipelines, data flow, loss landscapes, activation functions, training curves, attention heatmaps - even if they only say "draw", "visualise", "sketch", "make a figure of", "画图", "画个架构图", "示意图", or ask to restyle or redraw an existing ML figure so it looks consistent and clean.
 ---
 

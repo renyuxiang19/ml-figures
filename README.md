@@ -47,3 +47,8 @@ The visual style is modelled on the TikZ illustrations of the
 Federico Brancasi and Jacopo Manenti. The palette and conventions were
 measured from those figures. All code and templates here were written from
 scratch.
+
+## License
+
+Licensed under the GNU Affero General Public License v3.0. See
+[LICENSE](LICENSE).
