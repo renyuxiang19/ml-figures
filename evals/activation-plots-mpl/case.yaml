@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: activation-plots-mpl
+expected_outcome: |
+  A matplotlib figure with two panels (functions, derivatives) over [-4, 4], in the mlfig plot style (serif fonts, palette hues, no tick marks, direct labels or a clean legend). Curves are mathematically correct. The script is reusable and outputs vector and raster files.

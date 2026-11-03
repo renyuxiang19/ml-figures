@@ -1,0 +1,38 @@
+% Convolutional pipeline: feature maps as 3-D boxes (width = channels),
+% kernels as small tinted boxes with dotted projection lines.
+\documentclass[border=2mm]{standalone}
+\usepackage{mlfig}
+
+% \volume{x}{y}{depth}{height}{width}{style}{name}: oblique box, front face at (x,y).
+% Coordinates (name-a) top-left-front, (name-b) bottom-left-front, (name-f) top-left-back.
+\newcommand{\volume}[7]{%
+  \begin{scope}[shift={(#1,#2)}]
+    \pgfmathsetmacro{\dx}{#3}\pgfmathsetmacro{\hy}{#4}\pgfmathsetmacro{\dz}{#5}
+    \draw[#6] (0,0) coordinate (#7-a) -- ++(\dx,0) -- ++(0,-\hy) -- ++(-\dx,0)
+              coordinate (#7-b) -- cycle;                              % front
+    \draw[#6] (\dx,0) -- ++(.5*\dz,.35*\dz) -- ++(0,-\hy) -- ++(-.5*\dz,-.35*\dz);  % side
+    \draw[#6] (0,0) -- ++(.5*\dz,.35*\dz) coordinate (#7-f) -- ++(\dx,0);           % top
+    \coordinate (#7-c) at (\dx/2+.25*\dz, -\hy/2+.175*\dz);           % centre
+  \end{scope}}
+
+\begin{document}
+\begin{tikzpicture}[ml, font=\small]
+  \tikzset{map/.style={draw=mlnavy, fill=white, line width=.5pt},
+           kern/.style={draw=mlred!50, fill=mlred!5, line width=.5pt}}
+
+  \volume{0}{0}{.25}{3.2}{3.2}{map}{in}
+  \volume{.6}{-.8}{.12}{.8}{.8}{kern}{k1}
+  \volume{3.2}{-.3}{.7}{2.4}{2.4}{map}{c1}
+  \volume{5.6}{-.7}{1.1}{1.4}{1.4}{map}{c2}
+  \volume{8.2}{-.9}{.25}{1.0}{.25}{map}{fc}
+
+  % kernel -> the single activation it produces in the next map (dotted, kernel hue)
+  \foreach \corner in {a,b,f}
+    \draw[densely dotted, mlred] (k1-\corner) -- ($(c1-c)+(-.3,.2)$);
+
+  \foreach \v/\t/\d in {in/Input/$224{\times}224{\times}3$, c1/Conv 1/$55{\times}55{\times}96$,
+                        c2/Conv 2/$27{\times}27{\times}256$, fc/FC/$4096$}
+    \node[note, below=3mm of \v-b, anchor=north west] {\t\\\d};
+  % Left-to-right order already reads as data flow; no arrows between volumes.
+\end{tikzpicture}
+\end{document}

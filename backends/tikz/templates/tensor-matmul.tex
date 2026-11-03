@@ -1,0 +1,33 @@
+% Matrix / tensor arithmetic: gridded rectangles whose shape shows the
+% dimensions, coloured by role (x, query, key, value, weight).
+\documentclass[border=2mm]{standalone}
+\usepackage{mlfig}
+\usepackage{amsmath}
+
+\begin{document}
+\begin{tikzpicture}[ml, font=\small]
+
+  % One row per projection: X x W = result. A weight matrix is grey with grid
+  % lines in its role's hue; the result takes the role's tint.
+  \foreach \row/\role/\sym [count=\k from 0] in {q/query/Q, k/key/K, v/value/V} {
+    \begin{scope}[yshift=-\k*1.9cm]
+      \node[cell=x, w=1cm, h=.5cm, label={[tag=x, label distance=2mm]above:$X$}] (x\row) {};
+      \tensorgrid{x\row}
+      \node[cell=weight, draw=ml\role!70, w=.75cm, h=1cm, right=1.4cm of x\row,
+            label={[tag=\role, label distance=2mm]above:$W^{\sym}$}] (w\row) {};
+      \tensorgrid[ml\role!70]{w\row}
+      \node[cell=\role, w=.75cm, h=.5cm, right=1.4cm of w\row,
+            label={[tag=\role, label distance=2mm]above:$\sym$}] (\row) {};
+      \tensorgrid{\row}
+      \node[scale=1.4] at ($(x\row.east)!.5!(w\row.west)$) {$\times$};
+      \node[scale=1.4] at ($(w\row.east)!.5!(\row.west)$) {$=$};
+    \end{scope}
+  }
+
+  % Result expression to the right, typeset as maths with role colours.
+  \node[right=1.2cm of k, anchor=west] {%
+    $Z=\operatorname{softmax}\!\left(\dfrac{\textcolor{mlquery!60!black}{Q}\,
+      \textcolor{mlkey!60!black}{K}^{\top}}{\sqrt{d_k}}\right)\textcolor{mlvalue!60!black}{V}$};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,47 @@
+% Block diagram: a stack of operators with residual paths, a repeated group
+% ("N x") and a tinted background region. Adapt names, colours and count.
+\documentclass[border=2mm]{standalone}
+\usepackage{mlfig}
+
+\begin{document}
+\begin{tikzpicture}[ml]
+
+  % --- operators, bottom to top. Stacked "block + thinblock" pairs are .1cm apart;
+  %     separate stages are .5-1cm apart.
+  \node[op=embedding]                         (emb)  {Token\\Embedding};
+  \node[sum, above=.5cm of emb]               (add)  {$+$};
+  \node[circle, draw, s=.6cm, left=.3cm of add,
+        label={[note, label distance=1mm]left:Positional\\Encoding}] (pe) {};
+  \draw (pe.170) to[out=40, in=220, looseness=1.5] (pe.-10);   % sine glyph
+
+  \node[op=attention, above=1cm of add]       (att)  {Multi-Head\\Attention};
+  \node[thinblock=norm, above=.1cm of att]    (n1)   {Add \& Norm};
+  \node[op=mlp, above=.6cm of n1]             (ffn)  {Feed\\Forward};
+  \node[thinblock=norm, above=.1cm of ffn]    (n2)   {Add \& Norm};
+
+  % --- data flow
+  \draw[->] ([yshift=-.4cm]emb.south) -- node[pos=0, below=1mm] {Inputs} (emb);
+  \draw[->] (emb) -- (add);
+  \draw (pe) -- (add);
+  \draw[->] (add) -- coordinate[pos=.6] (r1) (att);
+  \draw[->] (n1)  -- coordinate[pos=.5] (r2) (ffn);
+  \draw[->] (n2.north) -- node[pos=1, above=1mm] {Outputs} ++(0,.5);
+
+  % --- residual connections: leave the trunk, run alongside, re-enter the norm
+  \draw[->] (r1) -- ++(-1.25,0) |- (n1);
+  \draw[->] (r2) -- ++(-1.25,0) |- (n2);
+
+  % --- repeated group: dashed box + multiplicity on the side
+  \node[group, fit=(att)(n2), inner xsep=.5cm, inner ysep=.25cm] (stack) {};
+  \node[left=2mm of stack] (times) {$N\times$};
+
+  % --- background region: dotted, tinted, bold title in a free corner.
+  %     The extra fit point above the stack reserves a strip for the title.
+  \coordinate (titlestrip) at ([yshift=.45cm]stack.north);   % fit= cannot parse ([...]x)
+  \begin{scope}[on background layer]
+    \node[region=encoder, fit=(stack)(r1)(times)(titlestrip), inner sep=.2cm] (enc) {};
+  \end{scope}
+  \node[title, anchor=north west] at ([shift={(.12,-.12)}]enc.north west) {Encoder};
+
+\end{tikzpicture}
+\end{document}

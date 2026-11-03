@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: vit-architecture-no-format
+expected_outcome: |
+  A ViT architecture diagram in the mlfig style (pale semantic tints, thin dark lines, serif text). No format was requested, so a portable diagram format is chosen and the choice is stated. Structure is correct: patches -> linear projection -> [class] token + position embeddings -> L x encoder block (pre-norm, residuals) -> MLP head on the class token. Rendered image is clean, with no overlaps.

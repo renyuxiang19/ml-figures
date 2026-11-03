@@ -1,0 +1,37 @@
+% Neuron graph: layers of circles, dense connections, tinted group boxes and
+% coloured layer labels. Change \layers to reshape the network.
+\documentclass[border=2mm]{standalone}
+\usepackage{mlfig}
+
+\begin{document}
+\begin{tikzpicture}[ml, x=1.8cm, y=1cm]
+
+  % {layer index / number of neurons / role}. Role picks the colour
+  % (input, hidden, output, mean, variance, sample, or any palette hue).
+  \def\layers{1/4/input, 2/5/hidden, 3/5/hidden, 4/2/output}
+
+  \foreach \l/\n/\role in \layers
+    \foreach \i in {1,...,\n}
+      \node[neuron=\role] (N\l-\i) at (\l, {(\n+1)/2 - \i}) {};
+
+  % Dense connections. The white halo under each edge separates crossings.
+  \foreach \a/\na/\b/\nb in {1/4/2/5, 2/5/3/5, 3/5/4/2}
+    \foreach \i in {1,...,\na}
+      \foreach \j in {1,...,\nb} {
+        \draw[halo] (N\a-\i) -- (N\b-\j);
+        \draw[edge] (N\a-\i) -- (N\b-\j);
+      }
+
+  % Layer labels take the layer's hue, darkened.
+  \node[tag=input,  above=3mm of N1-1] {Input};
+  \node[tag=hidden, above=3mm of N2-1] {Hidden};
+  \node[tag=output, above=3mm of N4-1] {Output};
+
+  % Optional: a translucent box around a group of neurons, labelled above.
+  \begin{scope}[on background layer]
+    \node[draw=mloutput!30!black, fill=mloutput!20, opacity=.45, fit=(N4-1)(N4-2),
+          inner sep=1.5mm, label={[tag=output]below:$\hat{y}$}] {};
+  \end{scope}
+
+\end{tikzpicture}
+\end{document}

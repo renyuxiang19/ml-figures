@@ -1,0 +1,100 @@
+# Single source of truth for the visual style.
+# Every backend (SVG / TikZ / matplotlib) is generated from this file by
+# scripts/gen_styles.py. Edit here, then regenerate - never hand-edit the
+# generated style files.
+#
+# The palette reproduces LaTeX xcolor mixes such as `blue!80!black`
+# (80% blue + 20% black). Tints follow the same rule: `blue!15` means
+# 15% of the hue mixed into white; `blue!30!black` means 30% hue into black.
+
+palette:
+  # name:   hex        # xcolor origin
+  blue:     "#0000CC"  # blue!80!black       - default "computation" hue
+  blue2:    "#0000A3"  # blue!80!black!80!black - curves in plots
+  red:      "#CC0000"  # red!80!black
+  green:    "#009900"  # green!60!black
+  orange:   "#E67300"  # orange!90!black
+  yellow:   "#E0E000"  # yellow!88!black
+  purple:   "#660066"  # violet!80!black
+  cyan:     "#0080E6"  # blue!80!black!50!cyan
+  navy:     "#000066"  # blue!40!black       - network edges, dark accents
+  darkgreen: "#004D00" # green!30!black
+  gray:     "#808080"
+  ink:      "#000000"  # lines and primary text
+  paper:    "#FFFFFF"
+
+# Percent of the hue mixed into white (fills) or black (strokes / text).
+tint:
+  region: 10     # large background regions (Encoder / Decoder areas)
+  block: 15      # rectangular module blocks
+  node: 20       # neurons, tensor cells, small tokens
+  emphasis: 40   # highlighted cell, selected token
+shade:
+  outline: 30    # neuron outline = hue!30!black
+  label: 60      # colored label text = hue!60!black
+
+stroke:          # in pt (1pt = 1.333px at 96dpi)
+  hairline: 0.3  # grid lines inside tensors
+  thin: 0.4      # default for block outlines and arrows
+  thick: 0.8     # neuron outlines, network connections
+  heavy: 1.2     # plot axes
+  curve: 2.2     # main curve in function plots
+  svg_scale: 1.5 # SVG is usually viewed on screen at 1:1, where print-weight
+                 # hairlines anti-alias to grey; strokes there are scaled up
+
+dash:            # SVG stroke-dasharray, in pt
+  dashed: "3 2"  # grouping boxes (repeated sub-stacks, "x N")
+  dotted: "0.8 1.6"  # colored background regions, projection lines
+
+radius:
+  block: 1.4     # pt, rounded corners on blocks (~0.5mm)
+  region: 0      # regions are square
+
+arrow:           # Latex-style filled head, in pt
+  length: 4.3
+  width: 3.5
+
+font:
+  serif: ["Latin Modern Roman", "CMU Serif", "Computer Modern", "STIX Two Text", "Times New Roman", "DejaVu Serif", "serif"]
+  mono: ["Latin Modern Mono", "Inconsolata", "Consolas", "DejaVu Sans Mono", "monospace"]
+  size:          # pt
+    label: 9     # text inside blocks
+    small: 7.5   # secondary labels, dimension annotations
+    title: 9     # region titles (bold)
+
+# Concept -> hue. These are what make figures across a whole document feel
+# like one system: the same concept keeps the same color everywhere.
+semantic:
+  operators:     # block diagrams
+    embedding: red
+    attention: orange
+    norm: green            # LayerNorm / BatchNorm / Add & Norm
+    mlp: blue              # Feed-forward, Linear stacks, MLP heads
+    linear: navy           # single projection layer (use tint 10)
+    softmax: darkgreen     # softmax / output heads (use tint 10)
+    conv: blue
+    pool: cyan
+    recurrent: blue        # RNN / LSTM cell
+    gate: red              # LSTM / GRU gates
+    memory: gray           # cell state, caches, buffers
+    loss: red
+    frozen: gray           # frozen / unused / masked parts
+    latent: purple
+  layers:        # neuron graphs
+    input: green
+    hidden: blue
+    output: red
+    mean: yellow
+    variance: orange
+    sample: purple
+  tensors:       # matrix diagrams
+    x: green
+    query: red
+    key: blue
+    value: cyan
+    weight: gray
+  regions:       # background areas
+    encoder: cyan
+    decoder: green
+    preprocessing: orange
+    head: yellow

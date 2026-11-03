@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: lstm-cell-tikz
+expected_outcome: |
+  lstm_cell.tex compiles to a correct LSTM cell diagram in TikZ using the mlfig style (gates colour-coded consistently, thin black arrows, math labels). The figure shows all three gates, the candidate, the cell-state line with multiply/add nodes, and inputs/outputs labelled. It is clean, with no overlapping labels.
